@@ -1,7 +1,7 @@
 from flask import Flask, request,render_template, session, redirect
 from functools import wraps
 from databass import mygood,allgood,login,add,delete,get_good_by_id,updategood,get_good_details,update_bid # type: ignore
-
+#159156156
 app = Flask(__name__, static_folder='static',static_url_path='/')
 #set a secret key to hash cookies
 app.config['SECRET_KEY'] = '123TyU%^&'
