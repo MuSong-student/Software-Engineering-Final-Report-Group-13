@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>編輯商品</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style-edit.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>編輯商品</h2>
+        <form action="/update_good" method="POST">
+            <input type="hidden" name="goodid" value="{{ good.goodid }}">
+
+            <label for="goodname">商品名稱：</label>
+            <input type="text" id="goodname" name="goodname" value="{{ good.goodname }}" required>
+
+            <label for="content">商品內容：</label>
+            <textarea id="content" name="content" required>{{ good.content }}</textarea>
+
+            <label for="startprice">底價：</label>
+            <input type="number" id="startprice" name="startprice" value="{{ good.startprice }}" required>
+
+            <input type="submit" value="保存">
+        </form>
+    </div>
+    <button class="logout-button"><a href="/logout">登出</a></button>
+</body>
+</html>

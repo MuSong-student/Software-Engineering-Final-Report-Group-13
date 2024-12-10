@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拍賣品詳情</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style-bid.css') }}">
+</head>
+
+<body>
+<div class="container">
+    <h2>{{ good.goodname }} - 詳情</h2>
+    <p><strong>內容：</strong>{{ good.content }}</p>
+    <p><strong>底價：</strong>{{ good.startprice }}</p>
+    <p><strong>目前最高價：</strong>{{ good.highestprice }}</p>
+
+    <h3>出價紀錄</h3>
+    <table>
+        <tr>
+            <th>出價者ID</th>
+            <th>出價金額</th>
+        </tr>
+        {% for bid in bid %}
+        <tr>
+            <td>{{ bid.userid }}</td>
+            <td>{{ bid.bidprice }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>提出競標</h3>
+    <form action="/bid/{{ good.goodid }}" method="POST">
+        <!--<label for="bidder">出價者ID：</label>
+        <input type="text" id="bidder" name="bidder" required>-->
+
+        <label for="bidprice">出價金額：</label>
+        <input type="number" id="bidprice" name="bidprice" min="{{ good['startprice'] }}" required>
+
+        <input type="submit" value="競標">
+    </form>
+    <div class="button-center">
+        <button class="add-button"><a href="/allgood">返回商品列表</a></button>
+    </div>
+</div>
+
+<!-- 登出按鈕 -->
+<button class="logout-button"><a href="/logout">登出</a></button>
+</body>
+</html>
