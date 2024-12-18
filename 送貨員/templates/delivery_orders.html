@@ -27,6 +27,8 @@
                 <th>訂單編號</th>
                 <th>送貨員 ID</th>
                 <th>送貨員名稱</th>
+                <th>餐廳地址</th>
+                <th>客戶地址</th>
                 <th>取貨時間</th>
                 <th>配送完成時間</th>
                 <th>狀態</th>
@@ -39,6 +41,8 @@
                 <td>{{ order.D_I_id }}</td>
                 <td>{{ order.D_id or "未指派" }}</td>
                 <td>{{ order.D_name }}</td>
+                <td></td>
+                <td></td>
                 <td>{{ order.D_pickup_time or "未取貨" }}</td>
                 <td>{{ order.D_delivery_time or "未完成" }}</td>
                 <td>{{ order.D_status }}</td>
