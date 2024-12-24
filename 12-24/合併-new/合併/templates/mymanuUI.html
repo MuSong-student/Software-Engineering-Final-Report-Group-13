@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Auction List</title>
+    <link rel="stylesheet" href="style.css"> <!-- 確保正確引用 CSS 文件 -->
+</head>
+<body>
+    <div class="container">
+        <h2>我的菜單</h2>
+        <hr />
+        <table>
+            <thead>
+                <tr>
+                    <th>商品編號</th>
+                    <th>商品名稱</th>
+                    <th>商品描述</th>
+                    <th>售價</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rec in data %}
+                <tr>
+                    <td>{{ rec.M_id }}</td>
+                    <td>{{ rec.M_name }}</td>
+                    <td>{{ rec.M_description }}</td>
+                    <td>{{ rec.M_price }}</td>
+                    <td class="action-buttons">
+                        <button><a href="/delete?M_id={{ rec.M_id }}">刪除</a></button>
+                        <button><a href="/edit/{{ rec.M_id }}">修改</a></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- 按鈕區域 -->
+        <div class="button-center">
+            <button class="add-button"><a href="/addgood.html">新增商品</a></button>
+            <button class="add-button"><a href="/orders">查看訂單</a></button>
+            <button class="add-button"><a href="/merchant_home">首頁</a></button>
+        </div>
+    </div>
+
+    <!-- 登出按鈕 -->
+    <button class="logout-button"><a href="/logout">登出</a></button>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>編輯外送員資訊</title>
+</head>
+<body>
+    <h1>編輯外送員資訊</h1>
+    <form method="POST" action="{{ url_for('edit_delivery_info') }}">
+        <label for="D_name">姓名:</label>
+        <input type="text" id="D_name" name="D_name" value="{{ delivery_person.D_name if delivery_person else '' }}" required><br><br>
+        <label for="D_phone">電話:</label>
+        <input type="text" id="D_phone" name="D_phone" value="{{ delivery_person.D_phone if delivery_person else '' }}" required><br><br>
+        <button type="submit">儲存</button>
+    </form>
+</body>
+</html>
