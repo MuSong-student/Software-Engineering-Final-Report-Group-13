@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>確認訂單</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>確認訂單</h1>
+    
+    <h2>訂單詳情</h2>
+    <ul>
+        {% for item in cart_items %}
+            <li>
+                {{ item.name }} - NT$ {{ item.price }} x {{ item.quantity }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <p><strong>總金額: NT$ {{ total_price }}</strong></p>
+    
+    <form action="{{ url_for('finalize_order_route') }}" method="POST">
+        <button type="submit">最終確認訂單</button>
+    </form>
+
+    <a href="{{ url_for('view_cart') }}">返回購物車</a>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>訂單管理</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>訂單管理</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>訂單編號</th>
+                <th>訂單狀態</th>
+                <th>訂單時間</th>
+                <th>總金額</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.O_id }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.time }}</td>
+                <td>${{ order.total_price }}</td>
+                <td>
+                    {% if order.status == 'pending' %}
+                    <form action="/accepting_order/{{ order.O_id }}" method="POST" style="display:inline;">
+                        <button type="submit">接受</button>
+                    </form>
+                    <form action="/reject_order/{{ order.O_id }}" method="POST" style="display:inline;">
+                        <button type="submit">拒絕</button>
+                    </form>
+                    {% elif order.status == 'accepted' %}
+                    <form action="/notify_ready/{{ order.O_id }}" method="POST" style="display:inline;">
+                        <button type="submit">通知取單</button>
+                    </form>
+                    {% endif %}
+                    <a href="/order/{{ order.O_id }}">查看詳細內容</a>
+                </td>
+            </tr>
+            {% endfor %}
+            <button class="add-button"><a href="/myMenu">Go Back</a></button>
+        
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>購物車</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        // 動態更新總金額
+        function updateTotalPrice() {
+            let total = 0;
+            const items = document.querySelectorAll('.cart-item');
+            items.forEach(item => {
+                const price = parseFloat(item.getAttribute('data-price'));
+                const quantity = parseInt(item.querySelector('.item-quantity').value);
+                total += price * quantity;
+            });
+            document.getElementById('totalPriceDisplay').innerText = `NT$ ${total.toFixed(2)}`;
+            document.getElementById('totalPriceInput').value = total.toFixed(2);
+        }
+    </script>
+</head>
+<body>
+    <h1>購物車</h1>
+    
+    {% if cart_items %}
+        <h2>已選擇的菜品</h2>
+        <form action="{{ url_for('update_order_id_route') }}" method="POST">
+            <ul>
+                {% for item in cart_items %}
+                    <li class="cart-item" data-price="{{ item.M_price }}">
+                        <p>
+                            {{ item.M_name }} - NT$ {{ item.M_price }} x 
+                            <input 
+                                type="number" 
+                                name="quantity_{{ item.I_id }}" 
+                                class="item-quantity" 
+                                min="1" 
+                                value="{{ item.I_quantity }}" 
+                                required 
+                                onchange="updateTotalPrice()"
+                            >
+                        </p>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <!-- 隱藏字段 -->
+            <input type="hidden" name="restaurant_id" value="{{ cart_items[0].R_id }}">
+            <input type="hidden" id="totalPriceInput" name="total_price" value="{{ total_price }}">
+
+            <p><strong>總金額: <span id="totalPriceDisplay">NT$ {{ total_price }}</span></strong></p>
+        
+            <button type="submit">確認訂單</button>
+        </form>
+    {% else %}
+        <p>購物車為空！請先選擇商品。</p>
+    {% endif %}
+
+    <a href="{{ url_for('customer_home') }}">返回主頁</a>
+    <a href="{{ url_for('logout') }}">登出</a>
+</body>
+</html>

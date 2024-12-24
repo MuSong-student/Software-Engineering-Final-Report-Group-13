@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>平台管理員頁面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>平台管理員頁面</h1>
+
+    <!-- 商家應收金額 -->
+    <h2>各商家應收金額</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>商家名稱</th>
+                <th>應收金額</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for restaurant in restaurant_earnings %}
+            <tr>
+                <td>{{ restaurant.restaurant_name }}</td>
+                <td>${{ restaurant.total_earnings }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- 外送員接單數 -->
+    <h2>各外送員接單數</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>外送員名稱</th>
+                <th>接單數</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for delivery in delivery_order_count %}
+            <tr>
+                <td>{{ delivery.delivery_name }}</td>
+                <td>{{ delivery.order_count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- 客戶應付金額 -->
+    <h2>各客戶應付金額</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>客戶名稱</th>
+                <th>應付金額</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customer_payments %}
+            <tr>
+                <td>{{ customer.customer_name }}</td>
+                <td>${{ customer.total_payment }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('logout') }}">登出</a>
+</body>
+</html>

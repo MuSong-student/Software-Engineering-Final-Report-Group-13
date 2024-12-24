@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>訂單詳細內容</title>
+</head>
+<body>
+    <h1>訂單詳細內容</h1>
+    <p><strong>訂單編號:</strong> {{ orders.order_id }}</p>
+    <p><strong>訂單狀態:</strong> {{ orders.order_status }}</p>
+    <p><strong>訂單時間:</strong> {{ orders.order_time }}</p>
+    <p><strong>總金額:</strong> ${{ orders.total_price }}</p>
+    <p><strong>顧客姓名:</strong> {{ orders.customer_name }}</p>
+    <p><strong>顧客地址:</strong> {{ orders.customer_address }}</p>
+    <p><strong>顧客電話:</strong> {{ orders.customer_phone }}</p>
+    <h2>商品列表</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>商品名稱</th>
+                <th>數量</th>
+                <th>金額</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.item_name }}</td>
+                <td>{{ item.item_quantity }}</td>
+                <td>${{ item.item_price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="/orders">返回訂單列表</a>
+    <button class="logout-button"><a href="/logout">登出</a></button>
+</body>
+</html>
