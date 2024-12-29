@@ -151,10 +151,10 @@ def update_order_status(O_id, status):
 def get_merchant_daily_stats(A_account):
     sql = """
         SELECT 
-            COUNT(CASE WHEN o.status = 'accepted' THEN 1 END) AS accepted_count,
+            COUNT(CASE WHEN o.status = 'ready' THEN 1 END) AS accepted_count,
             COUNT(CASE WHEN o.status = 'rejected' THEN 1 END) AS rejected_count,
-            SUM(CASE WHEN o.status = 'accepted' THEN o.total_price ELSE 0 END) AS total_income
-        FROM `orders` o
+            SUM(CASE WHEN o.status = 'ready' THEN o.total_price ELSE 0 END) AS total_income
+        FROM orders o
         JOIN restaurant r ON o.R_id = r.R_id
         WHERE r.A_account = %s 
           AND DATE(o.time) = CURDATE();
