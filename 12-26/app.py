@@ -163,15 +163,17 @@ def merchant():
 
 @app.route('/platform')
 def platform():
+    # 檢查使用者是否已登入
     if 'user_id' not in session:
-        flash('請先登入。')
-        return redirect(url_for('login'))
+        flash('請先登入。')  # 如果未登入，顯示提示訊息
+        return redirect(url_for('login'))  # 重導至登入頁面
 
-    # 獲取所需數據
+    # 獲取數據：餐廳收益、配送訂單數量、顧客付款
     restaurant_earnings = fetch_restaurant_earnings()
     delivery_order_count = fetch_delivery_order_count()
     customer_payments = fetch_customer_payments()
 
+    # 將數據傳遞給模板，供前端顯示
     return render_template(
         'platform.html',
         restaurant_earnings=restaurant_earnings,
@@ -179,116 +181,128 @@ def platform():
         customer_payments=customer_payments
     )
 
-
-## 查看所有配送訂單
-
-## 查看所有配送訂單
+# 查看所有配送訂單
 @app.route('/delivery_orders')
 def view_delivery_orders():
+    # 檢查使用者是否已登入
     if 'user_id' not in session:
-        flash('請先登入。')
-        return redirect(url_for('login'))
-    # 查詢訂單，包含送貨員名稱、餐廳地址和顧客地址
-    orders = db.session.query(
-    Item.I_id,
-    Item.D_id,
-    Item.D_pickup_time,
-    Item.D_delivery_time,
-    Item.status,
-    DeliveryPerson.D_name,
-    Restaurant.R_address.label('restaurant_address'),
-    Customer.C_address.label('customer_address'),
-    Item.price  # 使用靜態價格
-    ).outerjoin(DeliveryPerson, Item.D_id == DeliveryPerson.D_id) \
-    .outerjoin(Restaurant, Item.R_id == Restaurant.R_id) \
-    .outerjoin(Customer, Item.C_id == Customer.C_id) \
-    .all()
+        flash('請先登入。')  # 如果未登入，顯示提示訊息
+        return redirect(url_for('login'))  # 重導至登入頁面
 
-    # 將查詢結果轉換成字典列表
+    # 從資料庫查詢配送訂單，結合送貨員、餐廳和顧客的相關數據
+    orders = db.session.query(
+        Item.I_id,  # 訂單ID
+        Item.D_id,  # 外送員ID
+        Item.D_pickup_time,  # 取餐時間
+        Item.D_delivery_time,  # 配送完成時間
+        Item.status,  # 訂單狀態
+        DeliveryPerson.D_name,  # 外送員名稱
+        Restaurant.R_address.label('restaurant_address'),  # 餐廳地址
+        Customer.C_address.label('customer_address'),  # 顧客地址
+        Item.price  # 訂單總價
+    ).outerjoin(DeliveryPerson, Item.D_id == DeliveryPerson.D_id) \
+     .outerjoin(Restaurant, Item.R_id == Restaurant.R_id) \
+     .outerjoin(Customer, Item.C_id == Customer.C_id) \
+     .all()
+
+    # 轉換查詢結果為字典列表，以便傳遞到模板
     orders_list = []
     for order in orders:
         orders_list.append({
-        'I_id': order.I_id,
-        'D_id': order.D_id if order.D_id else "未指派",
-        'D_name': order.D_name if order.D_name else "未指派",
-        'restaurant_address': order.restaurant_address if order.restaurant_address else "未提供",
-        'customer_address': order.customer_address if order.customer_address else "未提供",
-        'D_pickup_time': order.D_pickup_time if order.D_pickup_time else "未取貨",
-        'D_delivery_time': order.D_delivery_time if order.D_delivery_time else "未完成",
-        'status': order.status,
-        'price': order.price  # 加入計算好的價格
-    })
+            'I_id': order.I_id,
+            'D_id': order.D_id if order.D_id else "未指派",
+            'D_name': order.D_name if order.D_name else "未指派",
+            'restaurant_address': order.restaurant_address if order.restaurant_address else "未提供",
+            'customer_address': order.customer_address if order.customer_address else "未提供",
+            'D_pickup_time': order.D_pickup_time if order.D_pickup_time else "未取貨",
+            'D_delivery_time': order.D_delivery_time if order.D_delivery_time else "未完成",
+            'status': order.status,
+            'price': order.price  # 加入靜態價格
+        })
+    
+    # 傳遞訂單列表給模板
     return render_template('delivery_orders.html', orders=orders_list)
 
 # 接受配送訂單
 @app.route('/accept_order/<int:item_id>', methods=['POST'])
 def accept_order(item_id):
+    # 檢查使用者是否已登入
     if 'user_id' not in session:
-        flash('請先登入。')
-        return redirect(url_for('login'))
+        flash('請先登入。')  # 如果未登入，顯示提示訊息
+        return redirect(url_for('login'))  # 重導至登入頁面
 
+    # 獲取當前登入的外送員帳戶
     delivery_account = session.get('username')
     delivery_person = DeliveryPerson.query.filter_by(A_account=delivery_account).first()
 
     if not delivery_person:
+        # 若找不到外送員資料，提示用戶編輯個人資料
         flash('無法找到外送員資料，請先編輯個人資料。')
         return redirect(url_for('edit_delivery_info'))
 
-    # 查詢訂單，不要查詢動態計算欄位
+    # 查詢指定的訂單
     item = db.session.query(Item).filter_by(I_id=item_id).first()
 
-    if item and item.status == '待接單':
-        # 根據菜品價格和數量計算總價
+    if item and item.status == '待接單':  # 確認訂單狀態是否可接單
+        # 查詢菜品價格，計算總價
         menu_item = Menu.query.filter_by(M_id=item.M_id).first()
         if menu_item:
             item.price = menu_item.M_price * item.I_quantity
 
-        # 更新訂單狀態
+        # 更新訂單狀態和外送員資訊
         item.status = '配送中'
         item.D_id = delivery_person.D_id
-        item.D_pickup_time = datetime.now()
-        db.session.commit()
-        flash('訂單已由您接單！')
+        item.D_pickup_time = datetime.now()  # 設定取餐時間
+        db.session.commit()  # 提交更改
+        flash('訂單已由您接單！')  # 提示用戶接單成功
     else:
         flash('無法接單，可能已被接走或不符合條件。')
 
+    # 重導至配送訂單列表頁面
     return redirect(url_for('view_delivery_orders'))
 
 # 完成配送訂單
 @app.route('/complete_order/<int:item_id>', methods=['POST'])
 def complete_order(item_id):
+    # 查詢指定的訂單
     item = Item.query.get(item_id)
-    if item and item.status == '配送中':
+    if item and item.status == '配送中':  # 確認訂單是否在配送中
+        # 更新訂單狀態和完成時間
         item.status = '已完成'
         item.D_delivery_time = datetime.now()  # 設定配送完成時間
-        db.session.commit()
-        flash('配送完成！')
+        db.session.commit()  # 提交更改
+        flash('配送完成！')  # 提示用戶配送完成
     else:
         flash('無法完成，可能尚未接單或已完成。')
+
+    # 重導至配送訂單列表頁面
     return redirect(url_for('view_delivery_orders'))
 
 # 外送員新增/更新資料
 @app.route('/edit_delivery_info', methods=['GET', 'POST'])
 def edit_delivery_info():
+    # 檢查使用者是否已登入
     if 'user_id' not in session:
-        flash('請先登入。')
-        return redirect(url_for('login'))
-    
+        flash('請先登入。')  # 如果未登入，顯示提示訊息
+        return redirect(url_for('login'))  # 重導至登入頁面
+
+    # 獲取當前登入的外送員帳戶
     delivery_account = session.get('username')
     delivery_person = DeliveryPerson.query.filter_by(A_account=delivery_account).first()
 
-    if request.method == 'POST':
+    if request.method == 'POST':  # 如果提交表單
+        # 獲取表單中的姓名和電話號碼
         name = request.form.get('D_name')
         phone = request.form.get('D_phone')
 
-        if not name or not phone:
+        if not name or not phone:  # 驗證是否填寫所有欄位
             flash("請填寫所有欄位")
             return redirect(url_for('edit_delivery_info'))
 
-        if delivery_person:
+        if delivery_person:  # 如果外送員資料已存在，則更新
             delivery_person.D_name = name
             delivery_person.D_phone = phone
-        else:
+        else:  # 如果外送員資料不存在，則新增
             delivery_person = DeliveryPerson(
                 D_name=name,
                 D_phone=phone,
@@ -296,10 +310,11 @@ def edit_delivery_info():
             )
             db.session.add(delivery_person)
 
-        db.session.commit()
-        flash("個人資料已成功儲存！")
-        return redirect(url_for('view_delivery_orders'))
+        db.session.commit()  # 提交更改
+        flash("個人資料已成功儲存！")  # 提示用戶資料儲存成功
+        return redirect(url_for('view_delivery_orders'))  # 重導至訂單列表頁面
 
+    # 顯示外送員資料編輯頁面
     return render_template('edit_delivery_info.html', delivery_person=delivery_person)
 
 
