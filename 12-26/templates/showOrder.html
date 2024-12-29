@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>訂單管理</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFE4E1; /* 淡粉紅背景 */
+            color: #333; /* 深灰文字 */
+            margin: 0;
+            padding: 0;
+            min-height: 100vh; /* 確保高度滿屏 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px; /* 調整寬度為 1200px */
+            width: 90%; /* 適應不同螢幕 */
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #FFF0F5; /* 淡紫粉背景 */
+            border: 1px solid #FFC0CB; /* 粉紅邊框 */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #FF69B4; /* 熱粉紅標題 */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th, table td {
+            border: 1px solid #FFC0CB; /* 粉紅邊框 */
+            padding: 10px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #FFD1DC; /* 淡粉表頭背景 */
+            color: #333; /* 深灰文字 */
+        }
+
+        button {
+            background-color: #FF69B4; /* 熱粉紅按鈕背景 */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: center;
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #C71585; /* 深粉紅背景 */
+        }
+
+        button a {
+            color: white; /* 按鈕內文字顏色 */
+            text-decoration: none;
+        }
+
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #FF69B4; /* 熱粉紅按鈕背景 */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout-button:hover {
+            background-color: #C71585; /* 深粉紅背景 */
+        }
+
+        .logout-button a {
+            color: white; /* 按鈕內文字顏色 */
+            text-decoration: none;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 9px;
+            background-color: #FF69B4; /* 熱粉紅按鈕背景 */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .back-button a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: #C71585; /* 深粉紅背景 */
+        }
+    </style>
+</head>
+<body>
+    <button class="logout-button"><a href="/logout">登出</a></button>
+    <div class="container">
+        <h1>訂單管理</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>訂單編號</th>
+                    <th>訂單狀態</th>
+                    <th>訂單時間</th>
+                    <th>總金額</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.O_id }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.time }}</td>
+                    <td>${{ order.total_price }}</td>
+                    <td>
+                        {% if order.status == 'pending' %}
+                        <form action="/accepting_order/{{ order.O_id }}" method="POST" style="display:inline;">
+                            <button type="submit">接受</button>
+                        </form>
+                        <form action="/reject_order/{{ order.O_id }}" method="POST" style="display:inline;">
+                            <button type="submit">拒絕</button>
+                        </form>
+                        {% elif order.status == 'accepted' %}
+                        <form action="/notify_ready/{{ order.O_id }}" method="POST" style="display:inline;">
+                            <button type="submit">通知取單</button>
+                        </form>
+                        {% endif %}
+                        <button class="view-button"><a href="/order/{{ order.O_id }}">查看詳細內容</a></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button class="back-button"><a href="/myMenu">我的菜單</a></button>
+    </div>
+</body>
+</html>

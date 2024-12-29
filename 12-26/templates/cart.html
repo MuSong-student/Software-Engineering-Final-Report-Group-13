@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>購物車</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFE4E1; /* 淡粉紅背景 */
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            padding: 20px;
+            background-color: #FFF0F5; /* 淡紫粉背景 */
+            border: 1px solid #FFC0CB; /* 粉紅邊框 */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #FF69B4; /* 熱粉紅標題 */
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #FFC0CB; /* 粉紅邊框 */
+            border-radius: 5px;
+            background-color: #FFF0F5; /* 淡紫粉背景 */
+        }
+
+        p {
+            margin: 0;
+            padding: 5px 0;
+        }
+
+        input[type="number"] {
+            padding: 5px;
+            width: 60px;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #FF69B4; /* 熱粉紅按鈕背景 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #C71585; /* 深粉紅背景 */
+        }
+
+        .top-buttons {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .top-buttons .button {
+            background-color: #FF69B4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .top-buttons .button a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .top-buttons .button:hover {
+            background-color: #C71585;
+        }
+
+    </style>
+    <script>
+        // 動態更新總金額
+        function updateTotalPrice() {
+            let total = 0;
+            const items = document.querySelectorAll('.cart-item');
+            items.forEach(item => {
+                const price = parseFloat(item.getAttribute('data-price'));
+                const quantity = parseInt(item.querySelector('.item-quantity').value);
+                total += price * quantity;
+            });
+            document.getElementById('totalPriceDisplay').innerText = `NT$ ${total.toFixed(2)}`;
+            document.getElementById('totalPriceInput').value = total.toFixed(2);
+        }
+    </script>
+</head>
+<body>
+    <div class="top-buttons">
+        <button class="button"><a href="{{ url_for('customer_home') }}">返回主頁</a></button>
+        <button class="button"><a href="{{ url_for('logout') }}">登出</a></button>
+    </div>
+    <div class="container">
+        <h1>購物車</h1>
+        {% if cart_items %}
+            <h2>已選擇的菜品</h2>
+            <form action="{{ url_for('update_order_id_route') }}" method="POST">
+                <ul>
+                    {% for item in cart_items %}
+                    <li class="cart-item" data-price="{{ item.M_price }}">
+                        <p>
+                            {{ item.M_name }} - NT$ {{ item.M_price }} x 
+                            <input 
+                                type="number" 
+                                name="quantity_{{ item.I_id }}" 
+                                class="item-quantity" 
+                                min="1" 
+                                value="{{ item.I_quantity }}" 
+                                required 
+                                onchange="updateTotalPrice()"
+                            >
+                        </p>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                <!-- 隱藏字段 -->
+                <input type="hidden" name="restaurant_id" value="{{ cart_items[0].R_id }}">
+                <input type="hidden" id="totalPriceInput" name="total_price" value="{{ total_price }}">
+
+                <p><strong>總金額: <span id="totalPriceDisplay">NT$ {{ total_price }}</span></strong></p>
+                <button type="submit">確認訂單</button>
+            </form>
+        {% else %}
+            <p>購物車為空！請先選擇商品。</p>
+        {% endif %}
+    </div>
+</body>
+</html>

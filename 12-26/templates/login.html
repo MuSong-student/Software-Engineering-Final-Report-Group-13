@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入</title>
+    <style>
+        /* 粉色系風格的CSS樣式 */
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFE4E1; /* 淡粉紅背景 */
+            color: #333; /* 深灰文字 */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h2 {
+            color: #C71585; /* 玫瑰紅標題 */
+            text-align: center;
+        }
+
+        form {
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #FFC0CB; /* 粉紅色邊框 */
+            border-radius: 10px;
+            background-color: #FFF0F5; /* 淡紫粉背景 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #C71585; /* 玫瑰紅文字 */
+        }
+
+        select {
+            width: 90%; /* 與輸入框一致 */
+            padding: 8px; /* 與輸入框一致 */
+            border: 1px solid #FFC0CB; /* 與輸入框一致 */
+            border-radius: 5px; /* 與輸入框一致 */
+            background-color: #FFF5F7; /* 與輸入框一致 */
+            font-size: 14px; /* 與輸入框一致 */
+            height: auto; /* 確保高度與輸入框一致 */
+        }
+
+        input[type="text"], input[type="password"], select {
+            width: 90%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #FFC0CB; /* 粉紅色邊框 */
+            border-radius: 5px;
+            background-color: #FFF5F7; /* 淡粉紅背景 */
+            font-size: 14px;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus, select:focus {
+            border-color: #FF69B4; /* 熱粉紅焦點顏色 */
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 8px;
+            background-color: #FF69B4; /* 熱粉紅按鈕背景 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #C71585; /* 玫瑰紅按鈕背景 */
+        }
+
+        p {
+            text-align: center;
+            margin-top: 20px;
+            color: #C71585; /* 玫瑰紅文字 */
+        }
+
+        a {
+            color: #FF69B4; /* 熱粉紅連結 */
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <form action="{{ url_for('login') }}" method="POST">
+        <h2>登入</h2>
+
+        <label for="username">使用者名稱:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">密碼:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="role">登入類型:</label>
+        <select id="role" name="role" required>
+            <option value="1">客戶登入</option>
+            <option value="2">商家登入</option>
+            <option value="3">平台登入</option>
+            <option value="4">外送員登入</option>
+        </select>
+
+        <button type="submit">登入</button>
+
+        <p>
+            <a href="{{ url_for('signup') }}">尚未註冊？點擊這裡</a>
+        </p>
+    </form>
+</body>
+</html>

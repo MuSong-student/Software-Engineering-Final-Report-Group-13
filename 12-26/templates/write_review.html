@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>填寫評論</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFE4E1;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 90%;
+            padding: 20px;
+            background-color: #FFF0F5;
+            border: 1px solid #FFC0CB;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #FF69B4;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+            width: 95%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #FFC0CB;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #FF69B4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #C71585;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>填寫評論</h1>
+        <form action="{{ url_for('submit_review', O_id=O_id) }}" method="POST">
+            <div class="form-group">
+                <label for="stars">星級 (1-5)</label>
+                <select name="stars" id="stars" required>
+                    <option value="">請選擇</option>
+                    <option value="1">1 星</option>
+                    <option value="2">2 星</option>
+                    <option value="3">3 星</option>
+                    <option value="4">4 星</option>
+                    <option value="5">5 星</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="comment">評論內容</label>
+                <textarea name="comment" id="comment" rows="4" required></textarea>
+            </div>
+            <button type="submit">提交評論</button>
+        </form>
+    </div>
+</body>
+</html>

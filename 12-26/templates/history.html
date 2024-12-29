@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歷史訂單</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFE4E1; /* 淡粉紅背景 */
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            padding: 20px;
+            background-color: #FFF0F5; /* 淡紫粉背景 */
+            border: 1px solid #FFC0CB; /* 粉紅邊框 */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #FF69B4; /* 熱粉紅標題 */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #FFC0CB; /* 粉紅邊框 */
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #FF69B4; /* 熱粉紅背景 */
+            color: white;
+        }
+
+        .button {
+            background-color: #FF69B4;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .button:hover {
+            background-color: #C71585;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>歷史訂單</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>訂單編號</th>
+                    <th>訂單時間</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.O_id }}</td>
+                    <td>{{ order.time }}</td>
+                    <td>
+                        {% if order.reviewed %}
+                        <a href="{{ url_for('view_review', O_id=order.O_id) }}" class="button">查看評論</a>
+                        {% else %}
+                        <a href="{{ url_for('write_review', O_id=order.O_id) }}" class="button">填寫評論</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查看評論</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFE4E1; /* 淡粉紅背景 */
+            color: #333; /* 深灰文字 */
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            padding: 20px;
+            background-color: #FFF0F5; /* 淡紫粉背景 */
+            border: 1px solid #FFC0CB; /* 粉紅邊框 */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #FF69B4; /* 熱粉紅標題 */
+        }
+
+        .review {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #FFD1DC; /* 淡粉背景 */
+            border: 1px solid #FFC0CB; /* 粉紅邊框 */
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .review h3 {
+            color: #C71585; /* 深粉紅 */
+            margin-bottom: 10px;
+        }
+
+        .review p {
+            color: #333; /* 深灰文字 */
+            line-height: 1.6;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #FF69B4; /* 熱粉紅按鈕背景 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .back-button:hover {
+            background-color: #C71585; /* 深粉紅背景 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>歷史評論</h1>
+        {% if review %}
+        <div class="review">
+            <h3>訂單評價:</h3>
+            <p><strong>評論星級:</strong> {{ review.S_stars }} / 5</p>
+            <p><strong>評論內容:</strong> {{ review.S_comment }}</p>
+        </div>
+        {% else %}
+        <p>此訂單尚未有評論。</p>
+        {% endif %}
+        <a class="back-button" href="{{ url_for('customer_home') }}">返回主頁</a>
+    </div>
+</body>
+</html>

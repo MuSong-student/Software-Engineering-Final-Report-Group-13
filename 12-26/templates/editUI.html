@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>編輯商品</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFE4E1; /* 淡粉紅背景 */
+            color: #333; /* 深灰文字 */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* 全屏置中 */
+        }
+
+        .container {
+            max-width: 600px; /* 調整寬度為 600px */
+            width: 100%;
+            padding: 20px;
+            background-color: #FFF0F5; /* 淡紫粉背景 */
+            border: 1px solid #FFC0CB; /* 粉紅邊框 */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #FF69B4; /* 熱粉紅標題 */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"], input[type="number"], textarea {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #FFC0CB; /* 粉紅邊框 */
+            border-radius: 5px;
+            background-color: #FFF5F7; /* 淡粉紅背景 */
+            font-size: 14px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #FF69B4; /* 熱粉紅按鈕背景 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #C71585; /* 深粉紅背景 */
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .add-button, .logout-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #FF69B4; /* 熱粉紅按鈕背景 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .add-button a, .logout-button a {
+            color: white; /* 按鈕內文字顏色 */
+            text-decoration: none;
+        }
+
+        .add-button:hover, .logout-button:hover {
+            background-color: #C71585; /* 深粉紅背景 */
+        }
+
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>編輯商品</h2>
+        <form action="/update_good" method="POST">
+            <input type="hidden" name="Mid" value="{{ menu.M_id }}">
+
+            <label for="goodname">商品名稱：</label>
+            <input type="text" id="goodname" name="Mname" value="{{ menu.M_name }}" required>
+
+            <label for="content">商品內容：</label>
+            <textarea id="content" name="Mdescription" required>{{ menu.M_description }}</textarea>
+
+            <label for="startprice">價格：</label>
+            <input type="number" id="startprice" name="Mprice" value="{{ menu.M_price }}" required>
+
+            <div class="button-row">
+                <button class="add-button"><a href="/myMenu">返回我的菜單</a></button>
+                <input type="submit" value="保存">
+            </div>
+        </form>
+    </div>
+    <button class="logout-button"><a href="/logout">登出</a></button>
+</body>
+</html>

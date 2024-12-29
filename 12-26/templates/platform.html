@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>平台管理員頁面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFE4E1; /* 淡粉紅背景 */
+            color: #333;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            padding: 20px;
+            background-color: #FFF0F5; /* 淡紫粉背景 */
+            border: 1px solid #FFC0CB; /* 粉紅邊框 */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1{
+            color: #FF69B4; /* 熱粉紅標題 */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th, table td {
+            border: 1px solid #FFC0CB; /* 粉紅邊框 */
+            padding: 10px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #FFD1DC; /* 淡粉表頭背景 */
+            color: #333;
+        }
+
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #FF69B4; /* 熱粉紅按鈕背景 */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout-button a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .logout-button:hover {
+            background-color: #C71585; /* 深粉紅背景 */
+        }
+    </style>
+</head>
+<body>
+    <button class="logout-button"><a href="{{ url_for('logout') }}">登出</a></button>
+    <div class="container">
+        <h1>平台管理員頁面</h1>
+        <h2>各商家應收金額</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>商家名稱</th>
+                    <th>應收金額</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for restaurant in restaurant_earnings %}
+                <tr>
+                    <td>{{ restaurant.restaurant_name }}</td>
+                    <td>${{ restaurant.total_earnings }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>各外送員接單數</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>外送員名稱</th>
+                    <th>接單數</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for delivery in delivery_order_count %}
+                <tr>
+                    <td>{{ delivery.delivery_name }}</td>
+                    <td>{{ delivery.order_count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>各客戶應付金額</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>客戶名稱</th>
+                    <th>應付金額</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customer_payments %}
+                <tr>
+                    <td>{{ customer.customer_name }}</td>
+                    <td>${{ customer.total_payment }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

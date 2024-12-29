@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商家首頁</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+   /* 商家首頁 CSS 樣式 - 粉紅色系 */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #FFE4E1; /* 淡粉紅背景 */
+    color: #333; /* 深灰文字 */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* 全屏置中 */
+}
+
+.container {
+    width: 100%;
+    max-width:800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #FFF0F5; /* 淡紫粉背景 */
+    border: 1px solid #FFC0CB; /* 粉紅邊框 */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #FF69B4; /* 熱粉紅標題 */
+}
+
+.edit-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #FF69B4; /* 熱粉紅按鈕背景 */
+    color: white;
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.edit-button:hover {
+    background-color: #C71585; /* 深粉紅背景 */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table th, table td {
+    border: 1px solid #FFC0CB; /* 粉紅邊框 */
+    padding: 10px;
+    text-align: center;
+}
+
+table th {
+    background-color: #FFD1DC; /* 淡粉表頭背景 */
+    color: #333; /* 深灰文字 */
+}
+
+.button-center {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.add-button {
+    display: inline-block;
+    background-color: #FF69B4; /* 熱粉紅按鈕背景 */
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.add-button:hover {
+    background-color: #C71585; /* 深粉紅背景 */
+}
+
+.logout-button {
+    position: absolute;
+    top: 10px;
+    right: 10px; /* 與編輯按鈕間隔 */
+    background-color: #FF69B4; /* 熱粉紅按鈕背景 */
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.logout-button:hover {
+    background-color: #C71585; /* 深粉紅背景 */
+}
+
+.logout-button a {
+    color: white;
+    text-decoration: none;
+}
+
+a {
+    color: white; /* 黑色文字 */
+    text-decoration: none; /* 移除底線 */
+}
+
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('edit_merchant_info') }}" class="edit-button">編輯商家資料</a>
+        <h1>商家首頁</h1>
+        <table>
+            <tr>
+                <th>接受訂單數量</th>
+                <th>拒絕訂單數量</th>
+                <th>總收入 (NTD)</th>
+            </tr>
+            <tr>
+                <td>{{ accepted_count }}</td>
+                <td>{{ rejected_count }}</td>
+                <td>{{ total_income }}</td>
+            </tr>
+        </table>
+
+        <div class="button-center">
+            <button class="add-button"><a href="/addgood.html">新增商品</a></button>
+            <button class="add-button"><a href="/orders">查看訂單</a></button>
+            <button class="add-button"><a href="/myMenu">我的菜單</a></button>
+        </div>
+        <!-- 登出按鈕 -->
+    <button class="logout-button"><a href="/logout">登出</a></button>
+    </div>
+</body>
+</html>
